@@ -1,0 +1,487 @@
+/* All styling for the Animator app. The .gleam files only attach class names. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+/* ── Layout: two columns ─────────────────────────────────────────────────── */
+
+.app {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background: #1a1a2e;
+  color: #d4c5a0;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+}
+
+/* Left column: the code editor. */
+.code-col {
+  width: 42%;
+  min-width: 320px;
+  max-width: 720px;
+  flex-shrink: 0;
+  display: flex;
+  border-right: 1px solid #3a3a5e;
+  background: #0f0f1e;
+}
+
+/* The code column stays in the DOM when collapsed, so CodeMirror keeps its
+   state; hiding it gives the right column the full width. */
+.app.code-hidden .code-col { display: none; }
+
+/* A small emoji button (the code pane's collapse toggle, and the playback
+   controls once they exist). */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #2a2a4a;
+  color: #d4c5a0;
+  border: 1px solid #4a4a8a;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 5px 8px;
+}
+.icon-btn:hover { background: #3a3a5e; }
+
+/* ── Code panel (left column) ───────────────────────────────────────────── */
+
+.code-panel {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.code-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #1a1a3e;
+  border-bottom: 1px solid #3a3a5e;
+}
+.code-title {
+  color: #e8d8b0;
+  font-family: 'Georgia', serif;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+/* Wrapper holding the editor. */
+.code-editor-wrap {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+}
+/* CodeMirror mount node: grows to fill the panel. */
+.code-editor {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  overflow: hidden;
+  background: #0d0d1a;
+}
+.code-editor .cm-editor { width: 100%; height: 100%; }
+
+/* Collapsible reference of the built-ins available to draw functions. */
+.reference {
+  margin: 8px 14px 0;
+  border: 1px solid #3a3a5e;
+  border-radius: 4px;
+  background: #0d0d1a;
+  overflow: hidden;
+}
+.reference-summary {
+  padding: 6px 12px;
+  cursor: pointer;
+  color: #b8a888;
+  font-family: monospace;
+  font-size: 12px;
+  user-select: none;
+}
+.reference-summary:hover { color: #e8d8b0; }
+.reference-body {
+  padding: 4px 12px 10px;
+  border-top: 1px solid #3a3a5e;
+}
+.reference-group { margin-top: 8px; }
+.reference-group-title {
+  color: #8a8aca;
+  font-family: monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+.reference-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 1px 0;
+}
+.reference-sig {
+  color: #89ddff;
+  font-family: monospace;
+  font-size: 12px;
+  white-space: pre;
+}
+.reference-desc { color: #6a7a8a; font-size: 11px; }
+
+/* ── Animation area (right column) ──────────────────────────────────────── */
+
+.animation-pane {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.animation-header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 8px 14px;
+  gap: 8px;
+  background: #1a1a3e;
+  border-bottom: 1px solid #3a3a5e;
+}
+
+.vault-launch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 42px;
+  max-width: 100%;
+  padding: 7px 14px 7px 8px;
+  border: 1px solid #ffdea6;
+  border-radius: 9px;
+  background: linear-gradient(145deg, #ffe4a9, #e8ab64);
+  color: #2c1b24;
+  box-shadow: 0 2px 0 #885135, 0 4px 12px #100e1d80;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 140ms ease, transform 140ms ease, box-shadow 140ms ease;
+}
+
+.vault-launch::before {
+  content: "";
+  flex: 0 0 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #3a2430;
+}
+
+.vault-launch::after {
+  content: "";
+  position: absolute;
+  left: 17px;
+  top: calc(50% - 5px);
+  border: 5px solid transparent;
+  border-left: 8px solid #ffe9b6;
+}
+
+.vault-launch:hover {
+  background: linear-gradient(145deg, #fff2d0, #f5c27c);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 0 #885135, 0 6px 16px #100e1d90;
+}
+.vault-launch:active { transform: translateY(1px); }
+.vault-launch:focus-visible { outline: 2px solid #fff3ce; outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vault-launch { transition: none; }
+  .vault-launch:hover, .vault-launch:active { transform: none; }
+}
+
+.drawing-menu {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drawing-menu select,
+.vault-map select {
+  min-width: 0;
+  max-width: 100%;
+  padding: 4px 8px;
+  border: 1px solid #4a4a8a;
+  border-radius: 4px;
+  background: #2a2a4a;
+  color: inherit;
+  font: inherit;
+}
+
+.animation-sliders {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding: 10px 14px;
+  background: #1a1a3e;
+  border-top: 1px solid #3a3a5e;
+}
+
+.animation-sliders label {
+  flex: 1 1 140px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.animation-sliders input {
+  width: 100%;
+  accent-color: #cfe3ff;
+}
+
+.canvas-area {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0a0a14;
+  container-type: size;
+}
+
+/* Show interpreter errors above the animation. */
+.output {
+  position: absolute;
+  inset: 48px 12px auto;
+  max-height: calc(100% - 60px);
+  margin: 0;
+  padding: 16px;
+  overflow: auto;
+  background: #171725;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #cfe3ff;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Button that reveals the code column again when it is hidden. */
+.reveal-code {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 10;
+}
+
+/* A centred square that fits the (possibly non-square) animation area. Give your
+   <canvas> this class, so that drawings aren't stretched. */
+.canvas {
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+}
+
+.vault-open .code-col,
+.vault-open .drawing-menu,
+.vault-open .canvas-area,
+.vault-open .animation-sliders {
+  display: none;
+}
+
+.vault {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 12px;
+  padding: 20px 12px;
+  background: radial-gradient(ellipse at 52% 20%, #292538, #100e1d 62%);
+  color: #e5e9f8;
+}
+
+.vault > p { max-width: 56ch; text-align: center; }
+
+.vault-map {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vault-board {
+  position: relative;
+  width: min(100%, 1040px, max(480px, calc((100vh - 270px) * var(--columns) / var(--rows))));
+  container-type: inline-size;
+  line-height: 0;
+  background: #282231;
+  border: 1px solid #815c44;
+  box-shadow: 0 8px 34px #090613b0;
+}
+
+.vault-scenery {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.vault-markers {
+  position: absolute;
+  inset: 0;
+}
+
+.vault-marker, .vault-actor {
+  position: absolute;
+  left: calc(var(--x) * 100% / var(--columns));
+  top: calc(var(--y) * 100% / var(--rows));
+  width: calc(100% / var(--columns));
+  height: calc(100% / var(--rows));
+  display: grid;
+  place-items: center;
+}
+
+.vault-actor { place-items: end center; }
+
+.vault-marker span {
+  display: grid;
+  place-items: center;
+  font-size: clamp(0.55rem, 1.8cqw, 0.9rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.vault-marker.gate-closed span,
+.vault-marker.gate-open span {
+  position: absolute;
+  top: 31%;
+  width: 57%;
+  height: 65%;
+  color: #fff1d1;
+  border: 1px solid #887057;
+  border-radius: 24% 24% 0 0;
+  background: repeating-linear-gradient(90deg, #272031 0 18%, #aa8058 18% 32%);
+  text-shadow: 0 1px 2px #0b0911, 0 1px 4px #0b0911;
+  transition: height 140ms ease-out;
+}
+
+.vault-marker.gate-open span { height: 24%; }
+
+.vault-marker.spark-pad span, .vault-marker.drift-pad span {
+  position: absolute;
+  bottom: 12%;
+  width: 56%;
+  height: 25%;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: #121625;
+}
+
+.vault-marker.spark-pad span { color: #ffaf7a; }
+.vault-marker.drift-pad span { color: #a3f1f4; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vault-marker span { transition: none; }
+}
+
+.vault-avatar {
+  --hood: #d55029;
+  --highlight: #ffb45f;
+  --suit: #8e304c;
+  --skin: #ffd0a0;
+  --seam: #281c34;
+  display: block;
+  position: relative;
+  width: 63%;
+  height: 62%;
+  filter: drop-shadow(0 1px 1px #090d19);
+}
+
+.vault-avatar.drift {
+  --hood: #428bcf;
+  --highlight: #9bedf4;
+  --suit: #2a526f;
+  --skin: #e0f9ff;
+  --seam: #122e50;
+}
+
+.vault-boots, .vault-suit, .vault-hood, .vault-face {
+  position: absolute;
+  display: block;
+}
+
+.vault-boots {
+  inset: 78% 19% 1%;
+  background: linear-gradient(90deg, var(--seam) 42%, transparent 42% 58%, var(--seam) 58%);
+  border-radius: 24%;
+}
+
+.vault-suit {
+  inset: 51% 12% 12%;
+  background: linear-gradient(117deg, var(--highlight) 18%, var(--suit) 20% 68%, var(--hood) 70%);
+  border-radius: 44% 44% 25% 25%;
+  box-shadow: inset 0 -2px #0e142960;
+}
+
+.vault-hood {
+  inset: 14% 6% 34%;
+  background: linear-gradient(145deg, var(--highlight), var(--hood) 68%);
+  border-radius: 48% 48% 36% 36%;
+}
+
+.vault-hood::before {
+  content: "";
+  position: absolute;
+  left: 27%;
+  top: -28%;
+  width: 47%;
+  height: 53%;
+  background: var(--highlight);
+  clip-path: polygon(4% 100%, 18% 44%, 40% 52%, 65% 0, 95% 54%, 100% 100%);
+}
+
+.vault-avatar.drift .vault-hood::before {
+  left: 22%;
+  border-radius: 72% 14% 65% 41%;
+  clip-path: none;
+  transform: rotate(22deg);
+}
+
+.vault-face {
+  inset: 23% 13% 12%;
+  border-radius: 48%;
+  background:
+    radial-gradient(ellipse at 32% 45%, var(--seam) 0 9%, transparent 12%),
+    radial-gradient(ellipse at 68% 45%, var(--seam) 0 9%, transparent 12%),
+    var(--skin);
+}
+
+.vault-face::after {
+  content: "";
+  position: absolute;
+  inset: 53% 38% 19%;
+  border-bottom: 1px solid var(--seam);
+  border-radius: 50%;
+}
+
+.vault-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.vault-controls button { min-height: 36px; min-width: 36px; }
+.vault-controls button[data-vault-key] { touch-action: none; user-select: none; }
+.vault-controls button:disabled { opacity: 0.5; cursor: default; }
+.vault-controls button[aria-pressed="true"] { background: #48528a; }
+.vault-status { font-weight: 700; }
+.vault-keyboard { color: #abb7d2; }
+
